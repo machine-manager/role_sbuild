@@ -11,6 +11,7 @@ defmodule RoleSbuild do
     	# mk-sbuild xenial
     	# schroot --chroot source:xenial-amd64 --user root --directory / -- apt-get update
     	# schroot --chroot source:xenial-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+    	# Install nano and less so that we can try to fix build failures
     	# schroot --chroot source:xenial-amd64 --user root --directory / -- apt-get install eatmydata nano less
     	# (install eatmydata before installing sbuild-xenial-amd64)
 		%{

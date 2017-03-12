@@ -1,6 +1,3 @@
-# Mail address where logs are sent to (mandatory, no default!)
-$mailto = $ENV{USER};
-
 # Name to use as override in .changes files for the Maintainer: field
 # (mandatory, no default!).
 $maintainer_name = 'Nobody <nobody@localhost>';
