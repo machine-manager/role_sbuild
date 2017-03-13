@@ -27,7 +27,7 @@ defmodule RoleSbuild do
 				"autoconf",
 				# Need kernel-wedge for building kernels
 				"kernel-wedge",
-				# Need fakeroot for building qbittorrent
+				# Need fakeroot for building libtorrent
 				"fakeroot",
 			],
 			post_install_unit: %All{units: [
