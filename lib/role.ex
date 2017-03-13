@@ -27,6 +27,8 @@ defmodule RoleSbuild do
 				"autoconf",
 				# Need kernel-wedge for building kernels
 				"kernel-wedge",
+				# Need fakeroot for building qbittorrent
+				"fakeroot",
 			],
 			post_install_unit: %All{units: [
 				conf_file("/etc/sudoers", 0o440),
