@@ -1,7 +1,8 @@
-alias Converge.{All, FilePresent}
+alias Converge.{All, Util, FilePresent}
 
 defmodule RoleSbuild do
-	import Converge.Util, only: [conf_file: 2, content: 1]
+	import Util, only: [conf_file: 2, content: 1]
+	Util.declare_external_resources("files")
 
 	def role(_tags \\ []) do
 		# TODO: create sbuild user
