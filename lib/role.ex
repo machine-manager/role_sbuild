@@ -49,6 +49,15 @@ defmodule RoleSbuild do
 					group:   "builder",
 				},
 			]},
+			ferm_output_chain:
+				"""
+				# apt-cacher-ng
+				outerface lo {
+					daddr 127.0.0.1 proto tcp syn dport 3142 {
+						mod owner uid-owner _apt ACCEPT;
+					}
+				}
+				""",
 		}
 	end
 end
