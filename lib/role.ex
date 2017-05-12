@@ -61,6 +61,12 @@ defmodule RoleSbuild do
 					daddr 127.0.0.1 proto tcp syn dport 28000 {
 						mod owner uid-owner apt-cacher-ng ACCEPT;
 					}
+
+					# Loopback connections are necessary for running the git test
+					# suite and possibly for other packages.
+					daddr 127.0.0.1 proto tcp syn {
+						mod owner uid-owner builder ACCEPT;
+					}
 				}
 				""",
 		}
