@@ -1,12 +1,11 @@
-alias Converge.{All, Util, FilePresent}
+alias Converge.{All, Util, FilePresent, User}
 
 defmodule RoleSbuild do
-	import Util, only: [conf_file: 2, content: 1]
+	import Util, only: [conf_file: 2, content: 1, path_expand_content: 1]
 	Util.declare_external_resources("files")
 
 	def role(_tags \\ []) do
-		# TODO: create sbuild user
-		# TODO: create builder user
+		# TODO: create sbuild user (?)
 		# TODO: do the initial setup:
 		# sbuild-update --keygen
     	# mk-sbuild xenial
@@ -69,6 +68,16 @@ defmodule RoleSbuild do
 					}
 				}
 				""",
+			regular_users: [
+				%User{
+					name:  "builder",
+					home:  "/home/builder",
+					shell: "/bin/zsh",
+					authorized_keys: [
+						path_expand_content("~/.ssh/id_rsa.pub") |> String.trim_trailing
+					]
+				}
+			],
 		}
 	end
 end
