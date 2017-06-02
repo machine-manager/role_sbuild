@@ -62,8 +62,8 @@ defmodule RoleSbuild do
 					}
 
 					# Loopback connections are necessary for running the git test
-					# suite and possibly for other packages.
-					daddr 127.0.0.1 proto tcp syn {
+					# suite, golang test suite, and possibly for other packages.
+					daddr 127.0.0.1 proto (tcp udp icmp) {
 						mod owner uid-owner builder ACCEPT;
 					}
 				}
