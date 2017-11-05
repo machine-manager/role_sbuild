@@ -1,22 +1,28 @@
 alias Converge.{All, Util, FilePresent, User}
 
 defmodule RoleSbuild do
-	import Util, only: [conf_file: 2, content: 1, path_expand_content: 1]
+	import Util, only: [conf_dir: 1, conf_file: 2, content: 1, path_expand_content: 1]
 	Util.declare_external_resources("files")
 
-	def role(_tags \\ []) do
+	def role(tags \\ []) do
 		# TODO: create sbuild user (?)
 		# TODO: do the initial setup:
+		# as root:
 		# sbuild-update --keygen
-    	# mk-sbuild xenial
-    	# schroot --chroot source:xenial-amd64 --user root --directory / -- apt-get update
-    	# schroot --chroot source:xenial-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+		#
+		# as non-root:
+		# RELEASE=stretch
+    	# mk-sbuild "$RELEASE"
+    	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
+    	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
     	# Install nano and less so that we can try to fix build failures
-    	# schroot --chroot source:xenial-amd64 --user root --directory / -- apt-get install eatmydata nano less
-    	# (install eatmydata before installing sbuild-xenial-amd64)
+    	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get install eatmydata nano less
+    	# (install eatmydata before installing sbuild-"$RELEASE"-amd64)
+    	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
 		%{
 			desired_packages: [
 				"sbuild",
+				"schroot",
 				"debhelper",
 				"ubuntu-dev-tools",
 				"apt-cacher-ng",
@@ -32,10 +38,13 @@ defmodule RoleSbuild do
 			],
 			post_install_unit: %All{units: [
 				conf_file("/etc/sudoers", 0o440),
+				conf_dir("/etc/schroot"),
+				conf_dir("/etc/schroot/chroot.d"),
 				conf_file("/etc/schroot/chroot.d/sbuild-xenial-amd64", 0o644),
+				conf_file("/etc/schroot/chroot.d/sbuild-stretch-amd64", 0o644),
 				%FilePresent{
 					path:    "/home/builder/.sbuildrc",
-					content: content("files/home/builder/.sbuildrc"),
+					content: EEx.eval_string(content("files/home/builder/.sbuildrc.eex"), [sbuild_default_distribution: sbuild_default_distribution]),
 					mode:    0o664,
 					user:    "builder",
 					group:   "builder",

@@ -1,0 +1,16 @@
+[stretch-amd64]
+description=stretch-amd64
+groups=sbuild,root
+root-groups=sbuild,root
+# Uncomment these lines to allow members of these groups to access
+# the -source chroots directly (useful for automated updates, etc).
+#source-root-users=sbuild,root
+#source-root-groups=sbuild,root
+type=directory
+profile=sbuild
+union-type=overlayfs
+directory=/var/lib/schroot/chroots/stretch-amd64
+source-root-users=root,sbuild,admin
+source-root-groups=root,sbuild,admin
+preserve-environment=true
+command-prefix=eatmydata
