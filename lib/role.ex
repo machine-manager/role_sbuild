@@ -17,7 +17,6 @@ defmodule RoleSbuild do
     	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
     	# Install nano and less so that we can try to fix build failures
     	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get install eatmydata nano less
-    	# (install eatmydata before installing sbuild-"$RELEASE"-amd64)
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
 		%{
 			desired_packages: [
