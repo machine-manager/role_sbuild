@@ -37,6 +37,8 @@ defmodule RoleSbuild do
 				# Need fakeroot for building libtorrent
 				"fakeroot",
 			],
+			# mk-sbuild tries to modprobe overlayfs instead of overlay
+			boot_time_kernel_modules: ["overlay"],
 			post_install_unit: %All{units: [
 				conf_file("/etc/sudoers", 0o440),
 				conf_dir("/etc/schroot"),
