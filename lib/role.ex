@@ -23,6 +23,7 @@ defmodule RoleSbuild do
 			desired_packages: [
 				"sbuild",
 				"schroot",
+				"debootstrap",
 				"debhelper",
 				"ubuntu-dev-tools",
 				"apt-cacher-ng",
