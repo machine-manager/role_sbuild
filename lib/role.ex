@@ -5,12 +5,12 @@ defmodule RoleSbuild do
 	Util.declare_external_resources("files")
 
 	def role(tags \\ []) do
-		# TODO: create sbuild user (?)
+		# TODO: put builder user in sbuild group
 		# TODO: do the initial setup:
 		# as root:
 		# sbuild-update --keygen
 		#
-		# as non-root:
+		# as builder:
 		# RELEASE=stretch
     	# mk-sbuild "$RELEASE"
     	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
