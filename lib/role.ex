@@ -61,9 +61,9 @@ defmodule RoleSbuild do
 			ferm_output_chain:
 				"""
 				outerface lo {
-					# apt -> apt-cacher-ng
+					# {apt, debootstrap} -> apt-cacher-ng
 					daddr 127.0.0.1 proto tcp syn dport 3142 {
-						mod owner uid-owner _apt ACCEPT;
+						mod owner uid-owner (_apt root) ACCEPT;
 					}
 
 					# apt-cacher-ng -> custom-packages-server
