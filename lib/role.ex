@@ -7,17 +7,18 @@ defmodule RoleSbuild do
 	def role(tags \\ []) do
 		# TODO: rsync make-tarball-to-sbuild to /home/builder/
 		# TODO: put builder user in sbuild group
+
 		# TODO: do the initial setup:
 		# as root:
+    	# sed -r -i 's/overlayfs/overlay/g' /usr/bin/mk-sbuild
 		# sbuild-update --keygen
 		#
-		# as builder:
+		# # as builder:
 		# RELEASE=stretch
-    	# mk-sbuild "$RELEASE"
+		# # Install nano and less so that we can try to fix build failures
+    	# mk-sbuild --eatmydata --debootstrap-include=nano,less "$RELEASE"
     	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
     	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
-    	# Install nano and less so that we can try to fix build failures
-    	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get install eatmydata nano less
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
 		%{
 			desired_packages: [
@@ -41,10 +42,6 @@ defmodule RoleSbuild do
 			boot_time_kernel_modules: ["overlay"],
 			post_install_unit: %All{units: [
 				conf_file("/etc/sudoers", 0o440),
-				conf_dir("/etc/schroot"),
-				conf_dir("/etc/schroot/chroot.d"),
-				conf_file("/etc/schroot/chroot.d/sbuild-xenial-amd64", 0o644),
-				conf_file("/etc/schroot/chroot.d/sbuild-stretch-amd64", 0o644),
 				%FilePresent{
 					path:    "/home/builder/.sbuildrc",
 					content: EEx.eval_string(content("files/home/builder/.sbuildrc.eex"), [sbuild_default_distribution: sbuild_default_distribution]),
