@@ -5,6 +5,7 @@ defmodule RoleSbuild do
 	Util.declare_external_resources("files")
 
 	def role(tags \\ []) do
+		# TODO: rsync make-tarball-to-sbuild to /home/builder/
 		# TODO: put builder user in sbuild group
 		# TODO: do the initial setup:
 		# as root:
