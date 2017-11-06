@@ -43,8 +43,8 @@ defmodule RoleSbuild do
 			post_install_unit: %All{units: [
 				conf_file("/etc/sudoers", 0o440),
 				%FilePresent{
-					path:    "/home/builder/.zshrc",
-					content: content("files/home/builder/.zshrc"),
+					path:    "/home/builder/.zshenv",
+					content: content("files/home/builder/.zshenv"),
 					mode:    0o640,
 					user:    "builder",
 					group:   "builder",
