@@ -3,7 +3,7 @@
 $maintainer_name = 'Nobody <nobody@localhost>';
 
 # Default distribution to build.
-$distribution    = #{inspect sbuild_default_distribution};
+$distribution    = <%= inspect(sbuild_default_distribution) %>;
 $build_arch_all  = 1;
 
 # When to purge the build directory afterwards; possible values are "never",
