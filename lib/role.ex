@@ -5,12 +5,10 @@ defmodule RoleSbuild do
 	Util.declare_external_resources("files")
 
 	def role(tags \\ []) do
-		# TODO: rsync make-tarball-to-sbuild to /home/builder/
 		# TODO: put builder user in sbuild group
 
 		# TODO: do the initial setup:
 		# as root:
-    	# sed -r -i 's/overlayfs/overlay/g' /usr/bin/mk-sbuild
 		# sbuild-update --keygen
 		#
 		# # as builder:
@@ -68,6 +66,15 @@ defmodule RoleSbuild do
 				%FilePresent{
 					path:    "/home/builder/bin/make-tarball-for-sbuild",
 					content: content("files/home/builder/bin/make-tarball-for-sbuild"),
+					mode:    0o750,
+					user:    "builder",
+					group:   "builder",
+				},
+				# Install a fixed mk-sbuild to ~/bin that tries to use overlay instead of overlayfs.
+				# Without this fix, mk-sbuild uses aufs instead of overlay.
+				%FilePresent{
+					path:    "/home/builder/bin/mk-sbuild",
+					content: File.read!("/usr/bin/mk-sbuild") |> String.replace("overlayfs", "overlay"),
 					mode:    0o750,
 					user:    "builder",
 					group:   "builder",
