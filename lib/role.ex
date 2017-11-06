@@ -1,4 +1,4 @@
-alias Converge.{All, Util, FilePresent, User}
+alias Converge.{All, Util, FilePresent, DirectoryPresent, User}
 
 defmodule RoleSbuild do
 	import Util, only: [conf_file: 2, content: 1, path_expand_content: 1]
@@ -43,16 +43,36 @@ defmodule RoleSbuild do
 			post_install_unit: %All{units: [
 				conf_file("/etc/sudoers", 0o440),
 				%FilePresent{
+					path:    "/home/builder/.zshrc",
+					content: content("files/home/builder/.zshrc"),
+					mode:    0o640,
+					user:    "builder",
+					group:   "builder",
+				},
+				%FilePresent{
 					path:    "/home/builder/.sbuildrc",
 					content: EEx.eval_string(content("files/home/builder/.sbuildrc.eex"), [sbuild_default_distribution: sbuild_default_distribution]),
-					mode:    0o664,
+					mode:    0o640,
 					user:    "builder",
 					group:   "builder",
 				},
 				%FilePresent{
 					path:    "/home/builder/.mk-sbuild.rc",
 					content: content("files/home/builder/.mk-sbuild.rc"),
-					mode:    0o664,
+					mode:    0o640,
+					user:    "builder",
+					group:   "builder",
+				},
+				%DirectoryPresent{
+					path:    "/home/builder/bin",
+					mode:    0o750,
+					user:    "builder",
+					group:   "builder",
+				},
+				%FilePresent{
+					path:    "/home/builder/bin/make-tarball-for-sbuild",
+					content: content("files/home/builder/bin/make-tarball-for-sbuild"),
+					mode:    0o750,
 					user:    "builder",
 					group:   "builder",
 				},
