@@ -28,15 +28,11 @@ defmodule RoleSbuild do
 				"debhelper",
 				"ubuntu-dev-tools",
 				"apt-cacher-ng",
-				# Need rng-tools to get enough entropy to generate GPG key :/
-				"rng-tools",
+				"rng-tools",    # to get enough entropy to generate GPG key
 				"rsync",
-				# Need autoconf for some things including erlang rules/debian:get-orig-source
-				"autoconf",
-				# Need kernel-wedge for building kernels
-				"kernel-wedge",
-				# Need fakeroot for building libtorrent
-				"fakeroot",
+				"autoconf",     # for some things including erlang rules/debian:get-orig-source
+				"kernel-wedge", # for building kernels
+				"fakeroot",     # for building libtorrent
 			],
 			# mk-sbuild tries to modprobe overlayfs instead of overlay
 			boot_time_kernel_modules: ["overlay"],
