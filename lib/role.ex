@@ -1,7 +1,7 @@
 alias Converge.{All, Util, FilePresent, User}
 
 defmodule RoleSbuild do
-	import Util, only: [conf_dir: 1, conf_file: 2, content: 1, path_expand_content: 1]
+	import Util, only: [conf_file: 2, content: 1, path_expand_content: 1]
 	Util.declare_external_resources("files")
 
 	def role(tags \\ []) do
