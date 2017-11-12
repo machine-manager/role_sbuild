@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+schroot --all-sessions --end-session
+rm -rf /home/builder/build-* || true
+sudo rm -rf /var/lib/sbuild/build/* || true

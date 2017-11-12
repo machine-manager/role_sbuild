@@ -70,6 +70,13 @@ defmodule RoleSbuild do
 					user:    "builder",
 					group:   "builder",
 				},
+				%FilePresent{
+					path:    "/home/builder/bin/free-up-disk-for-sbuild",
+					content: content("files/home/builder/bin/free-up-disk-for-sbuild"),
+					mode:    0o750,
+					user:    "builder",
+					group:   "builder",
+				},
 				# Install a fixed mk-sbuild to ~/bin that tries to use overlay instead of overlayfs.
 				# Without this fix, mk-sbuild uses aufs instead of overlay.
 				%FilePresent{
