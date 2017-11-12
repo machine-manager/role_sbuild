@@ -626,12 +626,11 @@ case "$SCHROOT_TYPE" in
     MNT=`mktemp -d -t schroot-XXXXXX`
 esac
 
-# Debian doesn't have overlayfs yet
 case "$SCHROOT_TYPE" in
     directory|file)
-    if grep -q '\soverlayfs$' /proc/filesystems \
-            || /sbin/modprobe -q --dry-run overlayfs; then
-        OVERLAY_FS=overlayfs
+    if grep -q '\soverlay$' /proc/filesystems \
+            || /sbin/modprobe -q --dry-run overlay; then
+        OVERLAY_FS=overlay
     else
         OVERLAY_FS=aufs
     fi
