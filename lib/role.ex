@@ -24,7 +24,6 @@ defmodule RoleSbuild do
 				"schroot",
 				"debootstrap",
 				"debhelper",
-				"ubuntu-dev-tools",
 				"apt-cacher-ng",
 				"rng-tools",    # to get enough entropy to generate GPG key
 				"rsync",
@@ -77,11 +76,11 @@ defmodule RoleSbuild do
 					user:    "builder",
 					group:   "builder",
 				},
-				# Install a fixed mk-sbuild to ~/bin that tries to use overlay instead of overlayfs.
-				# Without this fix, mk-sbuild uses aufs instead of overlay.
+				# Install our fixed mk-sbuild to ~/bin that tries to use overlay instead of overlayfs.
+				# Without this fix, mk-sbuild from ubuntu-dev-tools would use aufs instead of overlay.
 				%FilePresent{
 					path:    "/home/builder/bin/mk-sbuild",
-					content: File.read!("/usr/bin/mk-sbuild") |> String.replace("overlayfs", "overlay"),
+					content: content("files/home/builder/bin/mk-sbuild"),
 					mode:    0o750,
 					user:    "builder",
 					group:   "builder",
