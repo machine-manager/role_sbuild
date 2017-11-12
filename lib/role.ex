@@ -7,16 +7,17 @@ defmodule RoleSbuild do
 	def role(tags \\ []) do
 		# TODO: put builder user in sbuild group
 
-		# TODO: do the initial setup:
-		# as root:
-		# sbuild-update --keygen
-		#
-		# # as builder:
-		# RELEASE=stretch
-		# # Install nano and less so that we can try to fix build failures
-    	# mk-sbuild --eatmydata --debootstrap-include=nano,less "$RELEASE"
-    	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
-    	# schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+		# How to do the initial setup (as builder, not root):
+		_ = """
+		sbuild-update --keygen
+		# If that hangs, run as root: rngd -f -r /dev/urandom
+
+		RELEASE=stretch
+		# Install nano and less so that we can try to fix build failures
+		mk-sbuild --eatmydata --debootstrap-include=nano,less "$RELEASE"
+		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
+		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+    	"""
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
 		%{
 			desired_packages: [
