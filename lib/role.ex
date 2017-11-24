@@ -13,8 +13,11 @@ defmodule RoleSbuild do
 		# If that hangs, run as root: rngd -f -r /dev/urandom
 
 		RELEASE=stretch
+		# Install git because we stuff .git into tarballs and various packages
+		# (xfsprogs, notmuch) expect git to be installed when .git is present
+		#
 		# Install nano and less so that we can try to fix build failures
-		mk-sbuild --eatmydata --debootstrap-include=nano,less "$RELEASE"
+		mk-sbuild --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
     	"""
