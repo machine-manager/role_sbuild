@@ -1,0 +1,7 @@
+Package: debhelper
+Pin: release n=stretch-backports
+Pin-Priority: 990
+
+Package: meson
+Pin: release n=stretch-backports
+Pin-Priority: 990

@@ -18,7 +18,7 @@ defmodule RoleSbuild do
 		#
 		# Install nano and less so that we can try to fix build failures
 		mk-sbuild --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
-		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- bash -c "echo -e 'Package: debhelper\nPin: release n=$RELEASE-backports\nPin-Priority: 990\n' > /etc/apt/preferences"
+		cat ~/stretch_apt_preferences | schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- bash -c "cat > /etc/apt/preferences"
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
     	"""
@@ -62,6 +62,13 @@ defmodule RoleSbuild do
 				%FilePresent{
 					path:    "/home/builder/.mk-sbuild.rc",
 					content: content("files/home/builder/.mk-sbuild.rc"),
+					mode:    0o640,
+					user:    "builder",
+					group:   "builder",
+				},
+				%FilePresent{
+					path:    "/home/builder/stretch_apt_preferences",
+					content: content("files/home/builder/stretch_apt_preferences"),
 					mode:    0o640,
 					user:    "builder",
 					group:   "builder",
