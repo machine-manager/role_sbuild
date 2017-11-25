@@ -18,6 +18,7 @@ defmodule RoleSbuild do
 		#
 		# Install nano and less so that we can try to fix build failures
 		mk-sbuild --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
+		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- bash -c "echo -e 'Package: debhelper\nPin: release n=$RELEASE-backports\nPin-Priority: 990\n' > /etc/apt/preferences"
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
     	"""
