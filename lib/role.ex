@@ -22,7 +22,11 @@ defmodule RoleSbuild do
 		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
     	"""
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
+    	release                     = Util.tag_value!(tags, "release")
 		%{
+			apt_pins: [
+				%{package: "debhelper", pin: "release n=#{release}-backports", pin_priority: 990}
+			],
 			desired_packages: [
 				"sbuild",
 				"schroot",
