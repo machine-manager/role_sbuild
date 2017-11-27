@@ -17,10 +17,12 @@ defmodule RoleSbuild do
 		# (xfsprogs, notmuch) expect git to be installed when .git is present
 		#
 		# Install nano and less so that we can try to fix build failures
-		mk-sbuild --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
-		cat ~/stretch_apt_preferences | schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- bash -c "cat > /etc/apt/preferences"
-		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get update
-		schroot --chroot source:"$RELEASE"-amd64 --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+		for ARCH in amd64 i386; do
+			mk-sbuild --arch=$ARCH --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
+			cat ~/stretch_apt_preferences | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/preferences"
+			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get update
+			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+		end
     	"""
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
     	release                     = Util.tag_value!(tags, "release")
