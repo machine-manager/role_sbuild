@@ -37,6 +37,7 @@ defmodule RoleSbuild do
 			],
 			desired_packages: [
 				"sbuild",
+				"ccache",
 				"schroot",
 				"debootstrap",
 				"debhelper (>= 10.3)",
