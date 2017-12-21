@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -eu
+
+# Use the same build directory over and over to keep ccache happily caching
+build_path=/build/$(dpkg-parsechangelog --show-field Source)
+exec /usr/bin/sbuild --build-path "$build_path" "$@"
