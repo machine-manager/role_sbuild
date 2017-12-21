@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -eu
+
+export CCACHE_DIR=/mnt/ccache
+export CCACHE_COMPRESS=1
+export PATH="/usr/lib/ccache:$PATH"
+
+cmd=$1
+shift
+exec "$cmd" "$@"

@@ -10,12 +10,17 @@ defmodule RoleSbuild do
 		# How to do the initial setup:
 		_ = """
 		# as root:
+		# Add to fstab:
+			/ccache    /mnt/ccache  9p    trans=virtio,version=9p2000.L  0  2
+		# Add to /etc/schroot/sbuild/fstab:
+			/mnt/ccache /mnt/ccache none rw,bind 0 0
 		sbuild-adduser builder
 		rngd -r /dev/urandom
 
 		# as builder:
 		cd
 		sbuild-update --keygen
+		CCACHE_DIR=/mnt/ccache ccache --max-size 18G
 
 		RELEASE=stretch
 		# Install git because we stuff .git into tarballs and various packages
@@ -23,11 +28,16 @@ defmodule RoleSbuild do
 		#
 		# Install nano and less so that we can try to fix build failures
 		for ARCH in amd64 i386; do
-			mk-sbuild --arch=$ARCH --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
+			mk-sbuild --arch=$ARCH --eatmydata --debootstrap-include=git,ccache,nano,less "$RELEASE"
 			cat ~/stretch_apt_preferences | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/preferences"
+			cat ~/bin/with-ccache         | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /with-ccache; chmod a+rx /with-ccache"
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get update
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
 		done
+
+		# as root:
+		sed -i 's|^command-prefix=.*|command-prefix=/with-ccache,eatmydata|g' /etc/schroot/chroot.d/sbuild-*
+		# (must be done after creating /with-ccache in the schroots)
     	"""
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
     	release                     = Util.tag_value!(tags, "release")
@@ -97,6 +107,13 @@ defmodule RoleSbuild do
 				%FilePresent{
 					path:    "/home/builder/bin/free-up-disk-for-sbuild",
 					content: content("files/home/builder/bin/free-up-disk-for-sbuild"),
+					mode:    0o750,
+					user:    "builder",
+					group:   "builder",
+				},
+				%FilePresent{
+					path:    "/home/builder/bin/with-ccache",
+					content: content("files/home/builder/bin/with-ccache"),
 					mode:    0o750,
 					user:    "builder",
 					group:   "builder",
