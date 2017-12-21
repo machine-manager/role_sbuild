@@ -7,10 +7,15 @@ defmodule RoleSbuild do
 	def role(tags \\ []) do
 		# TODO: put builder user in sbuild group
 
-		# How to do the initial setup (as builder, not root):
+		# How to do the initial setup:
 		_ = """
+		# as root:
+		sbuild-adduser builder
+		rngd -r /dev/urandom
+
+		# as builder:
+		cd
 		sbuild-update --keygen
-		# If that hangs, run as root: rngd -f -r /dev/urandom
 
 		RELEASE=stretch
 		# Install git because we stuff .git into tarballs and various packages
@@ -22,7 +27,7 @@ defmodule RoleSbuild do
 			cat ~/stretch_apt_preferences | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/preferences"
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get update
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
-		end
+		done
     	"""
     	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
     	release                     = Util.tag_value!(tags, "release")
