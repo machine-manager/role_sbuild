@@ -118,13 +118,6 @@ defmodule RoleSbuild do
 					user:    "builder",
 					group:   "builder",
 				},
-				%FilePresent{
-					path:    "/home/builder/bin/sbuild",
-					content: content("files/home/builder/bin/sbuild"),
-					mode:    0o750,
-					user:    "builder",
-					group:   "builder",
-				},
 				# Install our fixed mk-sbuild to ~/bin that tries to use overlay instead of overlayfs.
 				# Without this fix, mk-sbuild from ubuntu-dev-tools would use aufs instead of overlay.
 				%FilePresent{
