@@ -8,7 +8,8 @@ defmodule RoleSbuild do
 		# TODO: put builder user in sbuild group
 
 		# How to do the initial setup:
-		_ = """
+		_ =
+		"""
 		# as root:
 		sbuild-adduser builder
 		rngd -r /dev/urandom
@@ -28,9 +29,9 @@ defmodule RoleSbuild do
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get update
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
 		done
-    	"""
-    	sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
-    	release                     = Util.tag_value!(tags, "release")
+		"""
+		sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
+		release                     = Util.tag_value!(tags, "release")
 		%{
 			apt_pins: [
 				%{package: "debhelper", pin: "release n=#{release}-backports", pin_priority: 990}
