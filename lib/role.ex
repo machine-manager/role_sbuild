@@ -74,13 +74,6 @@ defmodule RoleSbuild do
 					user:    "builder",
 					group:   "builder",
 				},
-				%FilePresent{
-					path:    "/home/builder/stretch_apt_preferences",
-					content: content("files/home/builder/stretch_apt_preferences"),
-					mode:    0o640,
-					user:    "builder",
-					group:   "builder",
-				},
 				%DirectoryPresent{
 					path:    "/home/builder/bin",
 					mode:    0o750,
