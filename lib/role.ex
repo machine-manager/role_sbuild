@@ -41,7 +41,7 @@ defmodule RoleSbuild do
 				"ccache",
 				"schroot",
 				"debootstrap",
-				"debhelper (>= 10.3)",
+				"debhelper (>= 11)",
 				"distro-info",  # mk-sbuild needs debian-distro-info and ubuntu-distro-info
 				"apt-cacher-ng",
 				"rng-tools",    # to get enough entropy to generate GPG key
