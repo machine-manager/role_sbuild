@@ -31,7 +31,7 @@ defmodule RoleSbuild do
 			# https -> http for apt-cacher-ng support
 			cat ~/sources.list            | sed -r 's,https://,http://,g' | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/sources.list; chmod a+r /etc/apt/sources.list"
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get update
-			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
+			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends -y
 		done
 		"""
 		sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
