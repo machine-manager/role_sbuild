@@ -32,15 +32,12 @@ defmodule RoleSbuild do
 		sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
 		release                     = Util.tag_value!(tags, "release")
 		%{
-			apt_pins: [
-				%{package: "debhelper", pin: "release n=#{release}-backports", pin_priority: 990}
-			],
 			desired_packages: [
 				"sbuild",
 				"ccache",
 				"schroot",
 				"debootstrap",
-				"debhelper (>= 11)",
+				"debhelper",
 				"distro-info",  # mk-sbuild needs debian-distro-info and ubuntu-distro-info
 				"apt-cacher-ng",
 				"rng-tools",    # to get enough entropy to generate GPG key
