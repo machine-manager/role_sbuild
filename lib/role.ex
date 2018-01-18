@@ -13,19 +13,23 @@ defmodule RoleSbuild do
 		# as root:
 		sbuild-adduser builder
 		rngd -r /dev/urandom
+		cat /etc/apt/sources.list | grep -v "http://packages:" > /home/builder/sources.list
+		chown builder:builder /home/builder/sources.list
 
 		# as builder:
 		cd
 		sbuild-update --keygen
 
 		RELEASE=stretch
-		# Install git because we stuff .git into tarballs and various packages
-		# (xfsprogs, notmuch) expect git to be installed when .git is present
-		#
-		# Install nano and less so that we can try to fix build failures
 		for ARCH in amd64 i386; do
+			# Install git because we stuff .git into tarballs and various packages
+			# (xfsprogs, notmuch) expect git to be installed when .git is present
+			#
+			# Install nano and less so that we can try to fix build failures
 			mk-sbuild --arch=$ARCH --eatmydata --debootstrap-include=git,nano,less "$RELEASE"
-			cat ~/stretch_apt_preferences | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/preferences"
+			cat ~/stretch_apt_preferences                                 | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/preferences;  chmod a+r /etc/apt/preferences"
+			# https -> http for apt-cacher-ng support
+			cat ~/sources.list            | sed -r 's,https://,http://,g' | schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- bash -c "cat > /etc/apt/sources.list; chmod a+r /etc/apt/sources.list"
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get update
 			schroot --chroot source:"$RELEASE"-"$ARCH" --user root --directory / -- apt-get dist-upgrade -V --no-install-recommends
 		done
