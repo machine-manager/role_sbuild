@@ -30,7 +30,6 @@ defmodule RoleSbuild do
 		done
 		"""
 		sbuild_default_distribution = Util.tag_value!(tags, "sbuild_default_distribution")
-		release                     = Util.tag_value!(tags, "release")
 		%{
 			desired_packages: [
 				"sbuild",
