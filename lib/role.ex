@@ -103,7 +103,7 @@ defmodule RoleSbuild do
 			ferm_output_chain:
 				"""
 				# User may not exist yet
-				@def $user_apt-cacher-ng = `(getent passwd apt-cacher-ng > /dev/null && echo apt-cacher-ng) || echo root`;
+				@def $user_apt_cacher_ng = `(getent passwd apt-cacher-ng > /dev/null && echo apt-cacher-ng) || echo root`;
 
 				outerface lo {
 					# {apt, debootstrap} -> apt-cacher-ng
@@ -113,7 +113,7 @@ defmodule RoleSbuild do
 
 					# apt-cacher-ng -> custom-packages-server
 					daddr 127.0.0.1 proto tcp syn dport 28000 {
-						mod owner uid-owner $user_apt-cacher-ng ACCEPT;
+						mod owner uid-owner $user_apt_cacher_ng ACCEPT;
 					}
 
 					# Loopback connections are necessary for running the git test
