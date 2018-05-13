@@ -19,7 +19,7 @@ defmodule RoleSbuild do
 		sbuild-update --keygen
 
 		RELEASE=stretch
-		for ARCH in amd64 i386; do
+		for ARCH in amd64 i386 arm64; do
 			# Install git because we stuff .git into tarballs and various packages
 			# (xfsprogs, notmuch) expect git to be installed when .git is present
 			#
@@ -37,13 +37,16 @@ defmodule RoleSbuild do
 				"schroot",
 				"debootstrap",
 				"debhelper",
-				"distro-info",  # mk-sbuild needs debian-distro-info and ubuntu-distro-info
+				"distro-info",      # mk-sbuild needs debian-distro-info and ubuntu-distro-info
 				"apt-cacher-ng",
-				"rng-tools",    # to get enough entropy to generate GPG key
+				"rng-tools",        # to get enough entropy to generate GPG key
 				"rsync",
-				"autoconf",     # for some things including erlang rules/debian:get-orig-source
-				"kernel-wedge", # for building kernels
-				"fakeroot",     # for building libtorrent
+				"autoconf",         # for some things including erlang rules/debian:get-orig-source
+				"kernel-wedge",     # for building kernels
+				"fakeroot",         # for building libtorrent
+				"qemu-system-arm",  # for arm64 schroot
+				"qemu-user-static", # for arm64 schroot
+				"qemu-user-binfmt", # for arm64 schroot
 			],
 			# mk-sbuild tries to modprobe overlayfs instead of overlay
 			boot_time_kernel_modules: ["overlay"],
