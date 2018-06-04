@@ -1,6 +1,3 @@
-SCHROOT_CONF_SUFFIX="source-root-users=root,sbuild,admin
-source-root-groups=root,sbuild,admin
-preserve-environment=true"
 # you will want to undo the below for stable releases, read `man mk-sbuild` for details
 # during the development cycle, these pockets are not used, but will contain important
 # updates after each release of Ubuntu
