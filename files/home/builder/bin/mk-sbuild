@@ -626,15 +626,20 @@ case "$SCHROOT_TYPE" in
     MNT=`mktemp -d -t schroot-XXXXXX`
 esac
 
-case "$SCHROOT_TYPE" in
-    directory|file)
-    if grep -q '\soverlay$' /proc/filesystems \
-            || /sbin/modprobe -q --dry-run overlay; then
-        OVERLAY_FS=overlay
-    else
-        OVERLAY_FS=aufs
-    fi
-esac
+# If no /sbin/modprobe, we're probably in an LXC container that can't use overlayfs
+if [[ -f /sbin/modprobe ]]; then
+    case "$SCHROOT_TYPE" in
+        directory|file)
+        if grep -q '\soverlay$' /proc/filesystems \
+                || /sbin/modprobe -q --dry-run overlay; then
+            OVERLAY_FS=overlay
+        else
+            OVERLAY_FS=aufs
+        fi
+    esac
+else
+    OVERLAY_FS=none
+fi
 
 # work around apt's GPG invocation that fails without root's .gnupg directory
 sudo mkdir -p -m 0700 "$MNT"/root/.gnupg
