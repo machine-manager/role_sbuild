@@ -47,6 +47,8 @@ defmodule RoleSbuild do
 				"qemu-system-arm",  # for arm64 schroot
 				"qemu-user-static", # for arm64 schroot
 				"qemu-user-binfmt", # for arm64 schroot
+				"qemu-user",        # for arm64 schroot
+				"binfmt-support",   # for arm64 schroot
 			],
 			# mk-sbuild tries to modprobe overlayfs instead of overlay
 			boot_time_kernel_modules: ["overlay"],
