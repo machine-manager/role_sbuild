@@ -46,7 +46,6 @@ defmodule RoleSbuild do
 				"fakeroot",         # for building libtorrent
 				"qemu-system-arm",  # for arm64 schroot
 				"qemu-user-static", # for arm64 schroot
-				"qemu-user-binfmt", # for arm64 schroot
 				"qemu-user",        # for arm64 schroot
 				"binfmt-support",   # for arm64 schroot
 			],
